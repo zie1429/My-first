@@ -1,0 +1,1085 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>Buku Setoran Hafalan</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap">
+  <style>
+    :root {
+      --bg: #F1F4F8;
+      --surface: #FFFFFF;
+      --ink: #18213A;
+      --muted: #5A6580;
+      --line: #DCE2EC;
+      --accent: #2347C5;
+      --accent-ink: #FFFFFF;
+      --accent-soft: #E3EAFB;
+      --good: #15704A;
+      --on-good: #FFFFFF;
+      --good-soft: #DDF3E8;
+      --warn: #8A5200;
+      --warn-soft: #FBEFD5;
+      --warn-fill: #F2C879;
+      --alert: #B02A23;
+      --on-alert: #FFFFFF;
+      --alert-soft: #FBE4E1;
+      --font-body: 'Plus Jakarta Sans', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+      --font-ar: 'Amiri', 'Scheherazade New', 'Noto Naskh Arabic', 'Traditional Arabic', serif;
+      color-scheme: light;
+      box-sizing: border-box;
+      padding-top: env(safe-area-inset-top, 0px);
+      padding-bottom: env(safe-area-inset-bottom, 0px);
+    }
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) {
+        --bg: #0F1420; --surface: #171E2E; --ink: #E7EBF5; --muted: #A0AAC0; --line: #2A3449;
+        --accent: #8FA8FF; --accent-ink: #0F1420; --accent-soft: #1F2A4D;
+        --good: #4FC48C; --on-good: #0B1A13; --good-soft: #143427;
+        --warn: #E6B14A; --warn-soft: #3A2D12; --warn-fill: #7D5F1B;
+        --alert: #FF8A80; --on-alert: #1A0B0A; --alert-soft: #3F1B19;
+        color-scheme: dark;
+      }
+    }
+    :root[data-theme="dark"] {
+      --bg: #0F1420; --surface: #171E2E; --ink: #E7EBF5; --muted: #A0AAC0; --line: #2A3449;
+      --accent: #8FA8FF; --accent-ink: #0F1420; --accent-soft: #1F2A4D;
+      --good: #4FC48C; --on-good: #0B1A13; --good-soft: #143427;
+      --warn: #E6B14A; --warn-soft: #3A2D12; --warn-fill: #7D5F1B;
+      --alert: #FF8A80; --on-alert: #1A0B0A; --alert-soft: #3F1B19;
+      color-scheme: dark;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-padding-top: env(safe-area-inset-top, 0px); }
+    body {
+      margin: 0; padding: 0; font-family: var(--font-body); font-size: 15px; line-height: 1.5;
+      background: var(--bg); color: var(--ink);
+      padding-left: max(16px, env(safe-area-inset-left, 0px));
+      padding-right: max(16px, env(safe-area-inset-right, 0px));
+    }
+    body::before {
+      content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px);
+      z-index: 10; background: var(--bg);
+    }
+    img { max-width: 100%; }
+    [hidden]:not([hidden=until-found i]) { display: none !important; }
+    h1, h2, h3, p { margin: 0; }
+    h1 { font-size: 22px; font-weight: 800; line-height: 1.2; text-wrap: balance; letter-spacing: -0.01em; }
+    button, input, select, textarea { font: inherit; color: inherit; }
+    :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+    .ar { font-family: var(--font-ar); }
+    .meta { color: var(--muted); font-size: 13px; }
+    .sub { color: var(--muted); margin-top: 2px; }
+    .eyebrow { font-size: 12px; font-weight: 700; letter-spacing: 0.07em; text-transform: uppercase; color: var(--muted); }
+    .num { font-variant-numeric: tabular-nums; }
+
+    .shell { max-width: 720px; margin: 0 auto; }
+    .top {
+      position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5;
+      background: var(--bg); padding-block: 10px;
+      display: flex; flex-direction: column; gap: 10px;
+    }
+    .top-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+    .app-name { font-weight: 800; font-size: 16px; letter-spacing: -0.01em; }
+    .icon-btn {
+      width: 40px; height: 40px; display: grid; place-items: center; border-radius: 10px;
+      border: 1px solid var(--line); background: var(--surface); color: var(--ink); text-decoration: none;
+    }
+    svg.ic { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+
+    .kids { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+    .kids button {
+      min-height: 52px; border-radius: 12px; border: 1px solid var(--line); background: var(--surface);
+      display: flex; flex-direction: column; align-items: flex-start; justify-content: center; padding: 6px 14px; cursor: pointer; text-align: left;
+      min-width: 0;
+    }
+    .kids button b { font-weight: 700; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .kids button small { font-size: 12px; color: var(--muted); max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .kids button[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+    .kids button[aria-pressed="true"] small { color: var(--accent-ink); opacity: 0.85; }
+
+    main { padding-block: 8px calc(100px + env(safe-area-inset-bottom, 0px)); display: block; }
+    section[data-view] { display: flex; flex-direction: column; gap: 14px; }
+    
+    .card { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 16px; min-width: 0; }
+    .card.callout { background: var(--accent-soft); border-color: transparent; display: flex; flex-direction: column; gap: 8px; align-items: flex-start; }
+    .card.callout .lead { font-weight: 700; }
+    .stack { display: flex; flex-direction: column; gap: 12px; }
+
+    .big { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; margin: 4px 0 10px; }
+    .big b { font-size: 46px; font-weight: 800; line-height: 1; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
+    .big span { color: var(--muted); }
+    .bar { height: 8px; border-radius: 999px; background: var(--line); overflow: hidden; }
+    .bar > i { display: block; height: 100%; background: var(--accent); border-radius: 999px; }
+    .bar.good > i { background: var(--good); }
+    .bar.thick { height: 12px; }
+    .grow { display: flex; flex-direction: column; gap: 6px; }
+    .grow-head { display: flex; justify-content: space-between; gap: 10px; align-items: baseline; flex-wrap: wrap; }
+    .grow-head b { font-weight: 700; }
+    .divider { border: 0; border-top: 1px solid var(--line); margin: 14px 0; }
+
+    .map-head { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; margin: 14px 0 8px; }
+    .map-head:first-of-type { margin-top: 10px; }
+    .map-head b { font-weight: 700; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(40px, 1fr)); gap: 6px; }
+    .cell {
+      position: relative; aspect-ratio: 1; min-height: 40px; border-radius: 9px; border: 1px solid var(--line);
+      background: var(--surface); color: var(--ink); font-weight: 700; font-size: 13px; cursor: pointer;
+      display: grid; place-items: center; padding: 0; font-variant-numeric: tabular-nums;
+    }
+    .cell.hafal { background: var(--good); border-color: var(--good); color: var(--on-good); }
+    .cell.sedang { border-color: var(--warn); background: linear-gradient(to top, var(--warn-fill) var(--p), transparent var(--p)); }
+    .cell.needs::after {
+      content: ""; position: absolute; top: 3px; right: 3px; width: 8px; height: 8px; border-radius: 50%;
+      background: var(--alert); box-shadow: 0 0 0 1.5px var(--surface);
+    }
+    .pills { display: flex; flex-wrap: wrap; gap: 6px; }
+    .pill {
+      position: relative; border: 1px solid var(--line); background: var(--surface); color: var(--ink); border-radius: 999px;
+      min-height: 36px; padding: 0 14px; font-weight: 600; font-size: 13px; cursor: pointer;
+    }
+    .pill.hafal { background: var(--good); border-color: var(--good); color: var(--on-good); }
+    .pill.sedang { background: var(--warn-soft); border-color: var(--warn); color: var(--warn); }
+    .pill.needs::after { content: ""; display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--alert); margin-left: 8px; box-shadow: 0 0 0 1.5px var(--surface); }
+    .legend { display: flex; flex-wrap: wrap; gap: 6px 16px; margin-top: 12px; font-size: 12px; color: var(--muted); }
+    .legend span { display: inline-flex; align-items: center; gap: 6px; }
+    .legend i { width: 14px; height: 14px; border-radius: 4px; border: 1px solid var(--line); display: inline-block; }
+    .legend i.h { background: var(--good); border-color: var(--good); }
+    .legend i.s { background: linear-gradient(to top, var(--warn-fill) 55%, transparent 55%); border-color: var(--warn); }
+    .legend i.n { background: var(--alert); border-radius: 50%; width: 9px; height: 9px; border: 0; }
+
+    .week { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; align-items: end; margin-top: 12px; }
+    .wd { display: flex; flex-direction: column; align-items: center; justify-content: flex-end; gap: 4px; min-width: 0; height: 110px; }
+    .wd .v { font-size: 12px; font-weight: 700; font-variant-numeric: tabular-nums; min-height: 16px; }
+    .wd .b { width: 100%; max-width: 34px; border-radius: 6px 6px 2px 2px; background: var(--accent); height: calc(var(--h) * 64px); }
+    .wd .b.z { height: 3px; background: var(--line); border-radius: 2px; }
+    .wd .d { font-size: 12px; color: var(--muted); }
+    .wd.today .d { color: var(--ink); font-weight: 800; }
+    .streak { display: flex; gap: 6px; align-items: baseline; margin-top: 4px; }
+    .streak b { font-size: 26px; font-weight: 800; font-variant-numeric: tabular-nums; }
+
+    .list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
+    .list > li { padding: 12px 0; border-top: 1px solid var(--line); display: flex; justify-content: space-between; gap: 12px; align-items: center; }
+    .list > li:first-child { border-top: 0; padding-top: 4px; }
+    .list .t { min-width: 0; }
+    .list .t b { font-weight: 700; }
+
+    .btn {
+      min-height: 44px; padding: 0 16px; border-radius: 10px; border: 1px solid var(--line); background: var(--surface);
+      color: var(--ink); font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; text-decoration: none; text-align: center;
+    }
+    .btn.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+    .btn.primary:disabled { opacity: 0.55; cursor: default; }
+    .btn.sm { min-height: 36px; padding: 0 12px; font-size: 13px; }
+    .btn.danger { color: var(--alert); }
+    .btn.danger[data-armed="1"] { background: var(--alert); color: var(--on-alert); border-color: var(--alert); }
+
+    .chip { display: inline-flex; align-items: center; padding: 2px 10px; border-radius: 999px; font-size: 12px; font-weight: 700; background: var(--accent-soft); color: var(--accent); white-space: nowrap; }
+    .chip.good { background: var(--good-soft); color: var(--good); }
+    .chip.warn { background: var(--warn-soft); color: var(--warn); }
+    .chip.alert { background: var(--alert-soft); color: var(--alert); }
+    .chip.mute { background: var(--bg); color: var(--muted); border: 1px solid var(--line); }
+
+    .form { display: flex; flex-direction: column; gap: 16px; }
+    .field { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+    .field > label, fieldset > legend { font-weight: 600; font-size: 14px; padding: 0; }
+    fieldset { border: 0; margin: 0; padding: 0; min-width: 0; display: flex; flex-direction: column; gap: 6px; }
+    input[type="text"], input[type="number"], input[type="date"], select, textarea {
+      width: 100%; min-height: 46px; padding: 10px 12px; border-radius: 10px; border: 1px solid var(--line);
+      background: var(--surface); font-size: 16px; min-width: 0;
+    }
+    textarea { min-height: 84px; resize: vertical; }
+    .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .hint { font-size: 13px; color: var(--muted); }
+    .err { color: var(--alert); font-weight: 600; font-size: 14px; }
+    .seg { position: relative; display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; gap: 3px; padding: 3px; border: 1px solid var(--line); border-radius: 12px; background: var(--bg); }
+    .seg input { position: absolute; opacity: 0; pointer-events: none; }
+    .seg label, .seg button {
+      display: flex; align-items: center; justify-content: center; text-align: center; min-height: 42px; padding: 4px 8px;
+      border-radius: 9px; font-weight: 600; font-size: 14px; cursor: pointer; border: 0; background: transparent; color: var(--ink);
+    }
+    .seg input:checked + label, .seg button[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); }
+    .seg.sm label, .seg.sm button { min-height: 34px; font-size: 13px; }
+    .seg.status button[data-s="hafal"][aria-pressed="true"] { background: var(--good); color: var(--on-good); }
+    .seg.status button[data-s="sedang"][aria-pressed="true"] { background: var(--warn-fill); color: var(--ink); }
+    .seg.status button[data-s="belum"][aria-pressed="true"] { background: var(--ink); color: var(--bg); }
+
+    .chips { display: flex; flex-wrap: wrap; gap: 6px; }
+    .chips button {
+      min-height: 36px; padding: 0 14px; border-radius: 999px; border: 1px solid var(--line); background: var(--surface); font-weight: 600; font-size: 13px; cursor: pointer;
+    }
+    .chips button[aria-pressed="true"] { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+    .filters { display: grid; grid-template-columns: 1fr; gap: 10px; }
+    .check { display: flex; gap: 10px; align-items: center; font-size: 14px; min-height: 36px; }
+    .check input { width: 20px; height: 20px; accent-color: var(--accent); margin: 0; }
+    .trow { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 14px; display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+    .r-head { display: flex; justify-content: space-between; gap: 12px; align-items: flex-start; }
+    .r-name { font-weight: 700; font-size: 16px; }
+    .r-head .ar { font-size: 26px; line-height: 1.2; direction: rtl; text-align: right; }
+    .r-mid { display: flex; align-items: center; gap: 10px; }
+    .r-mid .bar { flex: 1; }
+    .r-foot { display: flex; justify-content: space-between; gap: 10px; align-items: center; flex-wrap: wrap; }
+    .acts { display: flex; gap: 6px; flex-wrap: wrap; }
+
+    .ex { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 14px; display: flex; flex-direction: column; gap: 10px; }
+    .ex-head { display: flex; justify-content: space-between; gap: 10px; align-items: flex-start; }
+    .note { font-size: 14px; color: var(--ink); white-space: pre-wrap; overflow-wrap: anywhere; }
+
+    .dayh { font-size: 13px; font-weight: 700; color: var(--muted); margin: 8px 0 -2px; }
+    .lrow { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; display: flex; gap: 10px; justify-content: space-between; align-items: flex-start; }
+    .lbody { min-width: 0; display: flex; flex-direction: column; gap: 4px; }
+    .lbody .tags { display: flex; flex-wrap: wrap; gap: 6px; }
+    .empty { color: var(--muted); padding: 14px; text-align: center; border: 1px dashed var(--line); border-radius: 12px; }
+    textarea.rekap { min-height: 150px; font-size: 14px; }
+
+    .nav {
+      position: fixed; left: 0; right: 0; bottom: 0; z-index: 6; background: var(--surface); border-top: 1px solid var(--line);
+      padding: 6px max(8px, env(safe-area-inset-right, 0px)) calc(6px + env(safe-area-inset-bottom, 0px)) max(8px, env(safe-area-inset-left, 0px));
+    }
+    .nav-in { max-width: 720px; margin: 0 auto; display: grid; grid-template-columns: repeat(5, 1fr); gap: 2px; }
+    .nav a {
+      display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 6px 2px; border-radius: 10px; min-height: 52px;
+      color: var(--muted); text-decoration: none; font-size: 11px; font-weight: 600;
+    }
+    .nav a[aria-current="page"] { color: var(--accent); background: var(--accent-soft); }
+    .toast {
+      position: fixed; left: 50%; transform: translateX(-50%); bottom: calc(80px + env(safe-area-inset-bottom, 0px)); z-index: 20;
+      max-width: min(92vw, 520px); background: var(--ink); color: var(--bg); padding: 10px 14px; border-radius: 12px; font-weight: 600; font-size: 14px;
+      display: flex; gap: 14px; align-items: center; box-shadow: 0 6px 24px rgba(0,0,0,0.25);
+    }
+    .toast button { border: 0; background: transparent; color: var(--bg); text-decoration: underline; font-weight: 700; cursor: pointer; padding: 4px; min-height: 32px; }
+    @media (min-width: 560px) { .filters { grid-template-columns: 1fr 1fr; align-items: center; } }
+    @media (prefers-reduced-motion: reduce) { * { transition: none !important; scroll-behavior: auto !important; } }
+  </style>
+</head>
+<body>
+<div class="shell">
+  <header class="top">
+    <div class="top-row">
+      <p class="app-name">Buku Setoran Hafalan</p>
+      <a class="icon-btn" href="#pengaturan" data-nav="pengaturan" aria-label="Pengaturan">
+        <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h10M18 7h2M4 17h2M10 17h10"/><circle cx="16" cy="7" r="2"/><circle cx="8" cy="17" r="2"/></svg>
+      </a>
+    </div>
+    <div class="kids" id="kids" role="group" aria-label="Pilih anak"></div>
+  </header>
+
+  <main id="main">
+    <section id="v-ringkasan" data-view="ringkasan">
+      <div id="sum" class="stack"></div>
+    </section>
+
+    <section id="v-setor" data-view="setor" hidden>
+      <div>
+        <h1>Catat setoran</h1>
+        <p class="sub">Untuk <b class="who-name"></b></p>
+      </div>
+      <form class="card form" id="f-setor" novalidate>
+        <div class="field">
+          <label for="f-date">Tanggal</label>
+          <input type="date" id="f-date">
+        </div>
+        <fieldset>
+          <legend>Jenis setoran</legend>
+          <div class="seg" role="radiogroup" aria-label="Jenis setoran">
+            <input type="radio" name="f-type" id="type-baru" value="baru" checked><label for="type-baru">Hafalan baru</label>
+            <input type="radio" name="f-type" id="type-murajaah" value="murajaah"><label for="type-murajaah">Murajaah</label>
+          </div>
+        </fieldset>
+        <div class="field">
+          <label for="f-target">Surah atau target</label>
+          <select id="f-target"></select>
+          <p class="hint" id="f-hint"></p>
+        </div>
+        <div class="row2">
+          <div class="field"><label for="f-from">Dari ayat</label><input type="number" id="f-from" inputmode="numeric" min="1"></div>
+          <div class="field"><label for="f-to">Sampai ayat</label><input type="number" id="f-to" inputmode="numeric" min="1"></div>
+        </div>
+        <fieldset>
+          <legend>Nilai kelancaran</legend>
+          <div class="seg" role="radiogroup" aria-label="Nilai kelancaran">
+            <input type="radio" name="f-grade" id="g-lancar" value="lancar" checked><label for="g-lancar">Lancar</label>
+            <input type="radio" name="f-grade" id="g-cukup" value="cukup"><label for="g-cukup">Cukup</label>
+            <input type="radio" name="f-grade" id="g-ulang" value="ulang"><label for="g-ulang">Perlu diulang</label>
+          </div>
+          <p class="hint">Hafalan baru dengan nilai "Perlu diulang" belum dihitung sebagai hafal.</p>
+        </fieldset>
+        <div class="field">
+          <label for="f-who">Penyimak (opsional)</label>
+          <input type="text" id="f-who" autocomplete="off" placeholder="Ayah, Ibu, atau nama ustadzah">
+        </div>
+        <div class="field">
+          <label for="f-note">Catatan (opsional)</label>
+          <textarea id="f-note" placeholder="Contoh: masih tertukar di ayat 4, perlu diulang besok"></textarea>
+        </div>
+        <p class="err" id="f-err" role="alert" hidden></p>
+        <button type="submit" class="btn primary" id="f-submit">Simpan setoran</button>
+      </form>
+      <div>
+        <p class="eyebrow">Setoran terakhir</p>
+      </div>
+      <div id="setor-recent" class="stack"></div>
+    </section>
+
+    <section id="v-target" data-view="target" hidden>
+      <div>
+        <h1>Target hafalan</h1>
+        <p class="sub" id="t-sub"></p>
+      </div>
+      <div class="chips" id="t-groups" role="group" aria-label="Kelompok target">
+        <button type="button" data-gf="semua" aria-pressed="true">Semua</button>
+        <button type="button" data-gf="pilihan" aria-pressed="false">Ayat pilihan</button>
+        <button type="button" data-gf="j30" aria-pressed="false">Juz 30</button>
+        <button type="button" data-gf="j29" aria-pressed="false">Juz 29</button>
+      </div>
+      <div class="filters">
+        <div class="field">
+          <label for="t-status" class="meta">Tampilkan status</label>
+          <select id="t-status">
+            <option value="semua">Semua status</option>
+            <option value="belum">Belum dihafal</option>
+            <option value="sedang">Sedang dihafal</option>
+            <option value="hafal">Sudah hafal</option>
+            <option value="ulang">Perlu diulang</option>
+          </select>
+        </div>
+        <label class="check"><input type="checkbox" id="t-rev"> Urut dari surah terakhir (mulai An-Nas)</label>
+      </div>
+      <div id="t-list" class="stack"></div>
+    </section>
+
+    <section id="v-doa" data-view="doa" hidden>
+      <div>
+        <h1>Doa, dzikir, dan bacaan</h1>
+        <p class="sub">Catatan manual untuk <b class="who-name"></b></p>
+      </div>
+      <form class="card form" id="f-doa" novalidate>
+        <div class="field">
+          <label for="d-title">Nama bacaan</label>
+          <input type="text" id="d-title" autocomplete="off" placeholder="Contoh: Doa sebelum tidur">
+        </div>
+        <div class="row2">
+          <div class="field">
+            <label for="d-kind">Jenis</label>
+            <select id="d-kind">
+              <option>Doa</option>
+              <option>Dzikir</option>
+              <option>Bacaan salat</option>
+              <option>Lainnya</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="d-date">Tanggal</label>
+            <input type="date" id="d-date">
+          </div>
+        </div>
+        <fieldset>
+          <legend>Status hafalan</legend>
+          <div class="seg" role="radiogroup" aria-label="Status hafalan">
+            <input type="radio" name="d-status" id="ds-belum" value="belum"><label for="ds-belum">Belum</label>
+            <input type="radio" name="d-status" id="ds-sedang" value="sedang" checked><label for="ds-sedang">Sedang</label>
+            <input type="radio" name="d-status" id="ds-hafal" value="hafal"><label for="ds-hafal">Hafal</label>
+          </div>
+        </fieldset>
+        <div class="field">
+          <label for="d-note">Catatan (opsional)</label>
+          <textarea id="d-note" placeholder="Contoh: dihafal bersama Ibu setiap malam"></textarea>
+        </div>
+        <p class="err" id="d-err" role="alert" hidden></p>
+        <button type="submit" class="btn primary" id="d-submit">Tambah ke daftar</button>
+      </form>
+      <div id="d-sugg"></div>
+      <div id="d-list" class="stack"></div>
+      <div class="card stack" id="d-export" hidden>
+        <p class="meta">Unduh daftar ini sebagai berkas CSV, dipisah titik koma (;) agar rapi saat dibuka di Excel.</p>
+        <button type="button" class="btn" data-act="csv-ex">Unduh daftar doa dan dzikir (CSV)</button>
+      </div>
+    </section>
+
+    <section id="v-riwayat" data-view="riwayat" hidden>
+      <div>
+        <h1>Riwayat setoran</h1>
+        <p class="sub">Semua catatan <b class="who-name"></b>, terbaru di atas</p>
+      </div>
+      <div id="l-list" class="stack"></div>
+      <div class="card stack">
+        <p class="eyebrow">Salin dan unduh</p>
+        <button type="button" class="btn" data-act="rekap">Salin rekap 7 hari terakhir</button>
+        <textarea class="rekap" id="rekap-box" readonly hidden aria-label="Teks rekap"></textarea>
+        <button type="button" class="btn" data-act="csv-log" id="csv-log-btn" hidden>Unduh semua setoran (CSV)</button>
+        <p class="meta" id="csv-note" hidden>Berisi setoran kedua anak, dipisah titik koma (;) agar rapi saat dibuka di Excel.</p>
+      </div>
+    </section>
+
+    <section id="v-pengaturan" data-view="pengaturan" hidden>
+      <div>
+        <h1>Pengaturan</h1>
+        <p class="sub">Nama anak dan pengingat murajaah</p>
+      </div>
+      <div class="card form">
+        <div class="field"><label for="s-name-a">Nama anak pertama</label><input type="text" id="s-name-a" autocomplete="off"></div>
+        <div class="field"><label for="s-info-a">Keterangan</label><input type="text" id="s-info-a" autocomplete="off" placeholder="Contoh: Kelas 4 MI"></div>
+        <hr class="divider" style="margin:0">
+        <div class="field"><label for="s-name-b">Nama anak kedua</label><input type="text" id="s-name-b" autocomplete="off"></div>
+        <div class="field"><label for="s-info-b">Keterangan</label><input type="text" id="s-info-b" autocomplete="off" placeholder="Contoh: TK B"></div>
+        <hr class="divider" style="margin:0">
+        <div class="field">
+          <label for="s-days">Ingatkan murajaah jika belum diulang selama</label>
+          <select id="s-days">
+            <option value="7">7 hari</option>
+            <option value="14">14 hari</option>
+            <option value="30">30 hari</option>
+          </select>
+        </div>
+      </div>
+      <p class="meta" id="s-mode"></p>
+    </section>
+  </main>
+</div>
+
+<nav class="nav" aria-label="Menu utama">
+  <div class="nav-in">
+    <a href="#ringkasan" data-nav="ringkasan"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>Ringkasan</a>
+    <a href="#setor" data-nav="setor"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/></svg>Setor</a>
+    <a href="#target" data-nav="target"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6h11M9 12h11M9 18h11"/><path d="M4 6l1 1 2-2M4 12l1 1 2-2M4 18l1 1 2-2"/></svg>Target</a>
+    <a href="#doa" data-nav="doa"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h11a3 3 0 0 1 3 3v13H8a3 3 0 0 1-3-3z"/><path d="M5 17a3 3 0 0 1 3-3h11"/></svg>Doa</a>
+    <a href="#riwayat" data-nav="riwayat"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>Riwayat</a>
+  </div>
+</nav>
+<div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+
+<script>
+(function () {
+  'use strict';
+  var $ = function (s, r) { return (r || document).querySelector(s); };
+  var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
+  var esc = function (s) {
+    return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  };
+
+  var J29 = [
+    [67, 'Al-Mulk', 'الملك', 30], [68, 'Al-Qalam', 'القلم', 52], [69, 'Al-Haqqah', 'الحاقة', 52],
+    [70, "Al-Ma'arij", 'المعارج', 44], [71, 'Nuh', 'نوح', 28], [72, 'Al-Jinn', 'الجن', 28],
+    [73, 'Al-Muzzammil', 'المزمل', 20], [74, 'Al-Muddatstsir', 'المدثر', 56], [75, 'Al-Qiyamah', 'القيامة', 40],
+    [76, 'Al-Insan', 'الإنسان', 31], [77, 'Al-Mursalat', 'المرسلات', 50]
+  ];
+  var J30 = [
+    [78, "An-Naba'", 'النبأ', 40], [79, "An-Nazi'at", 'النازعات', 46], [80, "'Abasa", 'عبس', 42],
+    [81, 'At-Takwir', 'التكوير', 29], [82, 'Al-Infithar', 'الانفطار', 19], [83, 'Al-Muthaffifin', 'المطففين', 36],
+    [84, 'Al-Insyiqaq', 'الانشقاق', 25], [85, 'Al-Buruj', 'البروج', 22], [86, 'Ath-Thariq', 'الطارق', 17],
+    [87, "Al-A'la", 'الأعلى', 19], [88, 'Al-Ghasyiyah', 'الغاشية', 26], [89, 'Al-Fajr', 'الفجر', 30],
+    [90, 'Al-Balad', 'البلد', 20], [91, 'Asy-Syams', 'الشمس', 15], [92, 'Al-Lail', 'الليل', 21],
+    [93, 'Adh-Dhuha', 'الضحى', 11], [94, 'Al-Insyirah', 'الشرح', 8], [95, 'At-Tin', 'التين', 8],
+    [96, "Al-'Alaq", 'العلق', 19], [97, 'Al-Qadr', 'القدر', 5], [98, 'Al-Bayyinah', 'البينة', 8],
+    [99, 'Az-Zalzalah', 'الزلزلة', 8], [100, "Al-'Adiyat", 'العاديات', 11], [101, "Al-Qari'ah", 'القارعة', 11],
+    [102, 'At-Takatsur', 'التكاثر', 8], [103, "Al-'Ashr", 'العصر', 3], [104, 'Al-Humazah', 'الهمزة', 9],
+    [105, 'Al-Fil', 'الفيل', 5], [106, 'Quraisy', 'قريش', 4], [107, "Al-Ma'un", 'الماعون', 7],
+    [108, 'Al-Kautsar', 'الكوثر', 3], [109, 'Al-Kafirun', 'الكافرون', 6], [110, 'An-Nashr', 'النصر', 3],
+    [111, 'Al-Lahab', 'المسد', 5], [112, 'Al-Ikhlas', 'الإخلاص', 4], [113, 'Al-Falaq', 'الفلق', 5],
+    [114, 'An-Nas', 'الناس', 6]
+  ];
+  var GROUPS = [
+    { k: 'pilihan', n: 'Al-Fatihah dan ayat pilihan' },
+    { k: 'j30', n: "Juz 30 (Juz 'Amma)" },
+    { k: 'j29', n: 'Juz 29 (Tabarak)' }
+  ];
+  var T = [
+    { id: 'fatihah', group: 'pilihan', name: 'Al-Fatihah', short: 'Al-Fatihah', ar: 'الفاتحة', surah: 1, start: 1, end: 7 },
+    { id: 'kahfi-1', group: 'pilihan', name: 'Al-Kahfi ayat 1–10', short: 'Kahfi 1–10', ar: 'الكهف', surah: 18, start: 1, end: 10, part: true },
+    { id: 'kahfi-2', group: 'pilihan', name: 'Al-Kahfi ayat 102–110', short: 'Kahfi 102–110', ar: 'الكهف', surah: 18, start: 102, end: 110, part: true },
+    { id: 'kursi', group: 'pilihan', name: 'Ayat Kursi', short: 'Ayat Kursi', ar: 'آية الكرسي', surah: 2, start: 255, end: 255, part: true, sub: 'Al-Baqarah' },
+    { id: 'baqarah-285', group: 'pilihan', name: 'Al-Baqarah ayat 285–286', short: 'Baqarah 285–286', ar: 'البقرة', surah: 2, start: 285, end: 286, part: true }
+  ];
+  J30.forEach(function (s) { T.push({ id: 's' + s[0], group: 'j30', name: s[1], short: s[1], ar: s[2], surah: s[0], start: 1, end: s[3] }); });
+  J29.forEach(function (s) { T.push({ id: 's' + s[0], group: 'j29', name: s[1], short: s[1], ar: s[2], surah: s[0], start: 1, end: s[3] }); });
+  var TB = {};
+  T.forEach(function (t) { t.n = t.end - t.start + 1; TB[t.id] = t; });
+  var TOTAL_AYAT = T.reduce(function (a, t) { return a + t.n; }, 0);
+
+  var TYPE = { baru: 'Hafalan baru', murajaah: 'Murajaah' };
+  var GRADE = { lancar: 'Lancar', cukup: 'Cukup lancar', ulang: 'Perlu diulang' };
+  var GCLS = { lancar: 'good', cukup: 'warn', ulang: 'alert' };
+  var STATUS = { belum: 'Belum', sedang: 'Sedang dihafal', hafal: 'Hafal' };
+  var DAYS = ['Min', 'Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab'];
+  var SUGGEST = [
+    ['Doa sebelum makan', 'Doa'], ['Doa sesudah makan', 'Doa'], ['Doa sebelum tidur', 'Doa'], ['Doa bangun tidur', 'Doa'],
+    ['Doa masuk kamar mandi', 'Doa'], ['Doa keluar kamar mandi', 'Doa'], ['Doa untuk kedua orang tua', 'Doa'],
+    ['Doa naik kendaraan', 'Doa'], ['Doa masuk masjid', 'Doa'], ['Doa keluar masjid', 'Doa'],
+    ['Dzikir setelah salat', 'Dzikir'], ['Doa iftitah', 'Bacaan salat'], ['Bacaan tasyahud', 'Bacaan salat']
+  ];
+
+  function ymd(d) { var p = function (n) { return String(n).padStart(2, '0'); }; return d.getFullYear() + '-' + p(d.getMonth() + 1) + '-' + p(d.getDate()); }
+  function parseYmd(s) { var a = s.split('-').map(Number); return new Date(a[0], a[1] - 1, a[2]); }
+  function today() { return ymd(new Date()); }
+  function daysBetween(a, b) { return Math.round((parseYmd(b) - parseYmd(a)) / 86400000); }
+  function fmtShort(s) { return parseYmd(s).toLocaleDateString('id-ID', { day: 'numeric', month: 'short' }); }
+  function fmtLong(s) { return parseYmd(s).toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }); }
+  function fmt(n) { return Number(n).toLocaleString('id-ID'); }
+  function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2, 7); }
+
+  function defaultSettings() {
+    return { children: [{ id: 'a', name: 'Kakak', info: 'Kelas 4 MI' }, { id: 'b', name: 'Adik', info: 'TK B' }], reviewDays: 14 };
+  }
+  function normSettings(x) {
+    var d = defaultSettings();
+    if (!x || typeof x !== 'object') return d;
+    (x.children || []).forEach(function (c) {
+      d.children.forEach(function (k) { if (c && c.id === k.id) { if (c.name) k.name = String(c.name); if (c.info != null) k.info = String(c.info); } });
+    });
+    var rd = Number(x.reviewDays);
+    d.reviewDays = [7, 14, 30].indexOf(rd) >= 0 ? rd : 14;
+    return d;
+  }
+  var S = {
+    settings: defaultSettings(), logs: {}, extras: {}, child: 'a', view: 'ringkasan',
+    ready: false, loaded: false, mode: 'pending', rev: 0, cache: {},
+    ui: { group: 'semua', status: 'semua', rev: false, logLimit: 40 }
+  };
+  try { var kc = localStorage.getItem('hafalan-child'); if (kc === 'a' || kc === 'b') S.child = kc; } catch (e) {}
+  function bump() { S.rev++; S.cache = {}; }
+  function kidOf(id) { return S.settings.children.filter(function (c) { return c.id === id; })[0]; }
+  function childLogs(c) {
+    return Object.keys(S.logs).map(function (k) { return S.logs[k]; }).filter(function (l) { return l.child === c; });
+  }
+  function byTime(a, b) { return a.date < b.date ? -1 : a.date > b.date ? 1 : (a.ts || 0) - (b.ts || 0); }
+
+  function stats(c) {
+    if (S.cache[c]) return S.cache[c];
+    var res = {};
+    T.forEach(function (t) { res[t.id] = { t: t, count: 0, hasBaru: false, last: null, lastGrade: null, iv: [] }; });
+    childLogs(c).sort(byTime).forEach(function (l) {
+      var r = res[l.target]; if (!r) return;
+      if (l.type === 'baru') { r.hasBaru = true; if (l.grade !== 'ulang') r.iv.push([l.from, l.to]); }
+      r.last = l.date; r.lastGrade = l.grade;
+    });
+    var td = today();
+    T.forEach(function (t) {
+      var r = res[t.id];
+      r.iv.sort(function (a, b) { return a[0] - b[0]; });
+      var merged = [];
+      r.iv.forEach(function (v) {
+        var a = Math.max(v[0], t.start), b = Math.min(v[1], t.end);
+        if (a > b) return;
+        var m = merged[merged.length - 1];
+        if (m && a <= m[1] + 1) m[1] = Math.max(m[1], b); else merged.push([a, b]);
+      });
+      r.count = merged.reduce(function (s, m) { return s + (m[1] - m[0] + 1); }, 0);
+      var gap = t.start;
+      merged.forEach(function (m) { if (m[0] <= gap) gap = Math.max(gap, m[1] + 1); });
+      r.gap = gap;
+      r.status = r.count >= t.n ? 'hafal' : (r.count > 0 || r.hasBaru ? 'sedang' : 'belum');
+      r.needs = !!r.last && (r.lastGrade === 'ulang' || (r.count > 0 && daysBetween(r.last, td) > S.settings.reviewDays));
+    });
+    S.cache[c] = res;
+    return res;
+  }
+  function aggregate(st, keys) {
+    var a = { count: 0, total: 0, hafal: 0, nt: 0 };
+    T.forEach(function (t) {
+      if (keys && t.group !== keys) return;
+      var r = st[t.id]; a.count += r.count; a.total += t.n; a.nt++; if (r.status === 'hafal') a.hafal++;
+    });
+    return a;
+  }
+  function pctOf(c, tot) { return tot ? Math.round(c / tot * 100) : 0; }
+  function lastDays(n) {
+    var out = [];
+    for (var i = n - 1; i >= 0; i--) { var d = new Date(); d.setDate(d.getDate() - i); out.push({ key: ymd(d), label: DAYS[d.getDay()] }); }
+    return out;
+  }
+  function metaOf(t) {
+    var rng = t.start === t.end ? 'ayat ' + t.start : 'ayat ' + t.start + '–' + t.end;
+    if (t.part) return (t.sub ? t.sub : 'Surah ' + t.surah) + ' · ' + rng;
+    return 'Surah ' + t.surah + ' · ' + t.n + ' ayat';
+  }
+
+  var store = {
+    db: null, dl: null,
+    init: function () {
+      var self = this;
+      var p1 = Promise.resolve(null);
+      try { if (window.claude && window.claude.use) p1 = window.claude.use('db').catch(function () { return null; }); } catch (e) {}
+      return p1.then(function (db) {
+        if (db) { self.db = db; S.mode = 'db'; self.subscribe(); }
+        else { S.mode = 'local'; self.loadLocal(); }
+        S.ready = true; onReady();
+        var p2 = Promise.resolve(null);
+        try { if (window.claude && window.claude.use) p2 = window.claude.use('downloads').catch(function () { return null; }); } catch (e) {}
+        return p2;
+      }).then(function (dl) { self.dl = dl || null; renderExportButtons(); });
+    },
+    subscribe: function () {
+      var db = this.db;
+      function fail() { S.loaded = true; changed(); }
+      db.collection('logs').onSnapshot(function (snap) {
+        var o = {}; snap.docs.forEach(function (d) { o[d.id] = Object.assign({}, d.data(), { id: d.id }); });
+        S.logs = o; S.loaded = true; changed();
+      }, fail);
+      db.collection('extras').onSnapshot(function (snap) {
+        var o = {}; snap.docs.forEach(function (d) { o[d.id] = Object.assign({}, d.data(), { id: d.id }); });
+        S.extras = o; changed();
+      }, function () {});
+      db.doc('settings/main').onSnapshot(function (snap) {
+        if (!snap.exists) return;
+        var ae = document.activeElement;
+        if (S.view === 'pengaturan' && ae && ae.closest && ae.closest('#v-pengaturan')) return;
+        S.settings = normSettings(snap.data()); changed(); fillSettings();
+      }, function () {});
+    },
+    loadLocal: function () {
+      try {
+        var raw = localStorage.getItem('hafalan-data-v1');
+        if (raw) { var d = JSON.parse(raw); S.logs = d.logs || {}; S.extras = d.extras || {}; S.settings = normSettings(d.settings); }
+      } catch (e) {}
+      S.loaded = true; bump(); fillSettings();
+    },
+    persist: function () {
+      try { localStorage.setItem('hafalan-data-v1', JSON.stringify({ logs: S.logs, extras: S.extras, settings: S.settings })); } catch (e) {}
+    },
+    put: function (col, id, data) {
+      if (this.db) return this.db.collection(col).doc(id).set(data);
+      var rec = Object.assign({}, data, { id: id });
+      S[col][id] = rec; this.persist(); changed(); return Promise.resolve();
+    },
+    del: function (col, id) {
+      if (this.db) return this.db.collection(col).doc(id).delete();
+      delete S[col][id]; this.persist(); changed(); return Promise.resolve();
+    },
+    saveSettings: function () {
+      if (this.db) return this.db.doc('settings/main').set(S.settings);
+      this.persist(); return Promise.resolve();
+    }
+  };
+
+  function dbMsg(err) {
+    var c = err && err.code;
+    if (c === 'quota_exceeded') return 'Penyimpanan penuh. Hapus beberapa catatan lama.';
+    if (c === 'invalid_argument') return 'Tidak bisa menyimpan. Akun ini mungkin hanya boleh melihat.';
+    return 'Gagal menyimpan. Coba lagi sebentar lagi.';
+  }
+  function changed() { bump(); renderAll(); }
+
+  var toastT;
+  function hideToast() { $('#toast').hidden = true; }
+  function toast(msg, action) {
+    var el = $('#toast'); el.textContent = '';
+    var sp = document.createElement('span'); sp.textContent = msg; el.appendChild(sp);
+    if (action) {
+      var b = document.createElement('button'); b.type = 'button'; b.textContent = action.label;
+      b.addEventListener('click', function () { hideToast(); action.fn(); }); el.appendChild(b);
+    }
+    el.hidden = false; clearTimeout(toastT); toastT = setTimeout(hideToast, action ? 7000 : 3500);
+  }
+
+  var VIEWS = ['ringkasan', 'setor', 'target', 'doa', 'riwayat', 'pengaturan'];
+  function renderHeader() {
+    $('#kids').innerHTML = S.settings.children.map(function (c) {
+      return '<button type="button" data-kid="' + c.id + '" aria-pressed="' + (c.id === S.child) + '"><b>' + esc(c.name) + '</b><small>' + esc(c.info || '') + '</small></button>';
+    }).join('');
+    var nm = kidOf(S.child).name;
+    $$('.who-name').forEach(function (e) { e.textContent = nm; });
+  }
+
+  function route() {
+    var h = (location.hash || '').slice(1);
+    if (VIEWS.indexOf(h) < 0) h = 'ringkasan';
+    S.view = h;
+    $$('section[data-view]').forEach(function (s) { s.hidden = s.dataset.view !== h; });
+    $$('[data-nav]').forEach(function (a) {
+      if (a.dataset.nav === h) a.setAttribute('aria-current', 'page');
+      else a.removeAttribute('aria-current');
+    });
+    renderAll();
+    window.scrollTo(0, 0);
+  }
+
+  function go(v) {
+    if (location.hash === '#' + v) route();
+    else location.hash = v;
+  }
+
+  function renderAll() {
+    renderHeader();
+    var v = S.view;
+    if (v === 'ringkasan') renderSummary();
+    else if (v === 'setor') renderSetor();
+    else if (v === 'target') renderTargets();
+    else if (v === 'doa') renderDoa();
+    else if (v === 'riwayat') renderLogs();
+    else if (v === 'pengaturan') $('#s-mode').textContent = modeText();
+  }
+
+  function modeText() {
+    if (S.mode === 'db') return 'Data tersimpan di akun Anda dan tampil sama di HP maupun laptop.';
+    if (S.mode === 'local') return 'Data tersimpan di browser perangkat ini saja. Jika riwayat browser dibersihkan, catatan ikut hilang.';
+    return 'Menyiapkan penyimpanan…';
+  }
+
+  function cellHtml(t, r) {
+    var cls = 'cell' + (r.status === 'hafal' ? ' hafal' : r.status === 'sedang' ? ' sedang' : '') + (r.needs ? ' needs' : '');
+    var p = r.status === 'sedang' ? Math.max(12, Math.round(r.count / t.n * 100)) : 0;
+    var lab = t.name + ', ' + STATUS[r.status].toLowerCase() + (r.needs ? ', perlu murajaah' : '');
+    return '<button type="button" class="' + cls + '" style="--p:' + p + '%" data-act="setor" data-t="' + t.id + '" aria-label="' + esc(lab) + '" title="' + esc(t.name) + '">' + t.surah + '</button>';
+  }
+
+  function renderSummary() {
+    var el = $('#sum');
+    if (!S.loaded) { el.innerHTML = '<div class="empty">Memuat catatan…</div>'; return; }
+    var c = S.child, kid = kidOf(c), st = stats(c), ag = aggregate(st), logs = childLogs(c), td = today();
+    var pct = pctOf(ag.count, ag.total), h = '';
+    if (!logs.length) {
+      h += '<div class="card callout"><p class="lead">Belum ada setoran untuk ' + esc(kid.name) + '.</p><p class="meta">Catat setoran pertama. Peta surah di bawah akan terisi sesuai hafalan.</p><a class="btn primary" href="#setor" data-nav="setor">Catat setoran pertama</a></div>';
+    }
+    h += '<div class="card"><p class="eyebrow">Total hafalan ' + esc(kid.name) + '</p>' +
+      '<div class="big"><b>' + fmt(ag.count) + '</b><span>dari ' + fmt(ag.total) + ' ayat target</span></div>' +
+      '<div class="bar thick"><i style="width:' + (ag.total ? ag.count / ag.total * 100 : 0) + '%"></i></div>' +
+      '<p class="meta" style="margin-top:8px">' + pct + '% tercapai · ' + ag.hafal + ' dari ' + ag.nt + ' target sudah hafal</p><hr class="divider">' +
+      '<div class="stack">' + GROUPS.map(function (g) {
+        var a = aggregate(st, g.k);
+        return '<div class="grow"><div class="grow-head"><b>' + g.n + '</b><span class="meta num">' + fmt(a.count) + ' / ' + fmt(a.total) + ' ayat</span></div>' +
+          '<div class="bar ' + (a.count >= a.total ? 'good' : '') + '"><i style="width:' + (a.total ? a.count / a.total * 100 : 0) + '%"></i></div>' +
+          '<span class="meta">' + a.hafal + ' dari ' + a.nt + ' target hafal</span></div>';
+      }).join('') + '</div></div>';
+
+    var j30 = T.filter(function (t) { return t.group === 'j30'; }), j29 = T.filter(function (t) { return t.group === 'j29'; });
+    var h30 = j30.filter(function (t) { return st[t.id].status === 'hafal'; }).length;
+    var h29 = j29.filter(function (t) { return st[t.id].status === 'hafal'; }).length;
+    h += '<div class="card"><p class="eyebrow">Peta surah</p>' +
+      '<div class="map-head"><b>Ayat pilihan</b><span class="meta">ketuk untuk menyetor</span></div><div class="pills">' +
+      T.filter(function (t) { return t.group === 'pilihan'; }).map(function (t) {
+        var r = st[t.id];
+        return '<button type="button" class="pill ' + (r.status === 'hafal' ? 'hafal' : r.status === 'sedang' ? 'sedang' : '') + (r.needs ? ' needs' : '') + '" data-act="setor" data-t="' + t.id + '">' + esc(t.short) + '</button>';
+      }).join('') + '</div>' +
+      '<div class="map-head"><b>Juz 30</b><span class="meta num">' + h30 + ' dari ' + j30.length + ' surah hafal</span></div><div class="grid">' +
+      j30.map(function (t) { return cellHtml(t, st[t.id]); }).join('') + '</div>' +
+      '<div class="map-head"><b>Juz 29</b><span class="meta num">' + h29 + ' dari ' + j29.length + ' surah hafal</span></div><div class="grid">' +
+      j29.map(function (t) { return cellHtml(t, st[t.id]); }).join('') + '</div>' +
+      '<div class="legend"><span><i class="h"></i>Hafal</span><span><i class="s"></i>Sedang dihafal</span><span><i></i>Belum</span><span><i class="n"></i>Perlu murajaah</span></div></div>';
+
+    var days = lastDays(7), sums = {}, cnts = {};
+    logs.forEach(function (l) { sums[l.date] = (sums[l.date] || 0) + (l.to - l.from + 1); cnts[l.date] = (cnts[l.date] || 0) + 1; });
+    var mx = Math.max.apply(null, days.map(function (d) { return sums[d.key] || 0; }).concat([1]));
+    var tot7 = days.reduce(function (a, d) { return a + (sums[d.key] || 0); }, 0);
+    var act7 = days.filter(function (d) { return sums[d.key]; }).length;
+    var streak = 0, cur = new Date();
+    if (!cnts[ymd(cur)]) cur.setDate(cur.getDate() - 1);
+    while (cnts[ymd(cur)]) { streak++; cur.setDate(cur.getDate() - 1); }
+    h += '<div class="card"><p class="eyebrow">Pekan ini</p>' +
+      '<div class="streak"><b>' + streak + '</b><span class="meta">hari berturut-turut setor</span></div>' +
+      '<p class="meta">' + act7 + ' hari aktif dalam 7 hari terakhir · ' + tot7 + ' ayat disetor</p>' +
+      '<div class="week" role="img" aria-label="Jumlah ayat disetor per hari dalam 7 hari terakhir">' +
+      days.map(function (d) {
+        var v = sums[d.key] || 0;
+        return '<div class="wd' + (d.key === td ? ' today' : '') + '"><span class="v">' + (v || '') + '</span><div class="b' + (v ? '' : ' z') + '" style="--h:' + (v / mx) + '"></div><span class="d">' + d.label + '</span></div>';
+      }).join('') + '</div></div>';
+
+    var needs = T.map(function (t) { return st[t.id]; }).filter(function (r) { return r.needs; }).sort(function (a, b) { return a.last < b.last ? -1 : 1; });
+    h += '<div class="card"><p class="eyebrow">Perlu diulang</p>';
+    if (!needs.length) h += '<p class="meta" style="margin-top:6px">Belum ada yang perlu diulang. Hafalan yang lama tidak diulang akan muncul di sini setelah ' + S.settings.reviewDays + ' hari.</p>';
+    else {
+      h += '<ul class="list" style="margin-top:8px">' + needs.slice(0, 6).map(function (r) {
+        var why = r.lastGrade === 'ulang' ? 'Nilai terakhir: perlu diulang' : 'Terakhir diulang ' + daysBetween(r.last, td) + ' hari lalu';
+        return '<li><div class="t"><b>' + esc(r.t.name) + '</b><div class="meta">' + why + '</div></div><button type="button" class="btn sm" data-act="setor" data-t="' + r.t.id + '" data-type="murajaah">Murajaah</button></li>';
+      }).join('') + '</ul>';
+      if (needs.length > 6) h += '<p class="meta">Dan ' + (needs.length - 6) + ' lainnya di tab Target.</p>';
+    }
+    h += '</div>';
+    el.innerHTML = h;
+  }
+
+  function curType() { return $('#type-murajaah').checked ? 'murajaah' : 'baru'; }
+  function applyDefaults() {
+    var t = TB[$('#f-target').value]; if (!t) return;
+    var r = stats(S.child)[t.id], from = t.start;
+    if (curType() === 'baru' && r.gap <= t.end) from = r.gap;
+    $('#f-from').value = from; $('#f-to').value = t.end;
+    $('#f-from').min = t.start; $('#f-from').max = t.end; $('#f-to').min = t.start; $('#f-to').max = t.end;
+    updateHint();
+  }
+  function updateHint() {
+    var t = TB[$('#f-target').value]; if (!t) return;
+    var r = stats(S.child)[t.id];
+    var s = 'Ayat ' + t.start + '–' + t.end + '. Tercatat hafal ' + r.count + ' dari ' + t.n + ' ayat.';
+    if (r.last) s += ' Terakhir disetor ' + fmtShort(r.last) + ' (' + GRADE[r.lastGrade].toLowerCase() + ').';
+    $('#f-hint').textContent = s;
+  }
+  function logRow(l, withDel) {
+    var t = TB[l.target] || { name: l.target };
+    var rng = l.from === l.to ? 'ayat ' + l.from : 'ayat ' + l.from + '–' + l.to;
+    return '<div class="lrow"><div class="lbody"><div><b>' + esc(t.name) + '</b> <span class="meta">' + rng + ' · ' + fmtShort(l.date) + '</span></div>' +
+      '<div class="tags"><span class="chip">' + TYPE[l.type] + '</span><span class="chip ' + GCLS[l.grade] + '">' + GRADE[l.grade] + '</span></div>' +
+      (l.who ? '<div class="meta">Penyimak: ' + esc(l.who) + '</div>' : '') + (l.note ? '<p class="note">' + esc(l.note) + '</p>' : '') + '</div>' +
+      (withDel ? '<button type="button" class="btn sm danger" data-act="del-log" data-id="' + l.id + '" data-label="Hapus">Hapus</button>' : '') + '</div>';
+  }
+  function renderSetor() {
+    updateHint();
+    var ls = childLogs(S.child).sort(byTime).reverse().slice(0, 5);
+    $('#setor-recent').innerHTML = ls.length ? ls.map(function (l) { return logRow(l, false); }).join('') : '<div class="empty">Belum ada setoran.</div>';
+  }
+  function prefill(tid, type) {
+    $('#f-target').value = tid;
+    if (type) $('#type-' + type).checked = true;
+    else $('#type-' + (stats(S.child)[tid].status === 'hafal' ? 'murajaah' : 'baru')).checked = true;
+    applyDefaults(); go('setor');
+  }
+  function onSubmitSetor(e) {
+    e.preventDefault();
+    if (!S.ready) return;
+    var t = TB[$('#f-target').value], from = Number($('#f-from').value), to = Number($('#f-to').value), err = $('#f-err');
+    var date = $('#f-date').value || today();
+    var msg = '';
+    if (!t) msg = 'Pilih surah atau target.';
+    else if (!Number.isInteger(from) || !Number.isInteger(to)) msg = 'Isi nomor ayat awal dan akhir dengan angka.';
+    else if (from < t.start || to > t.end || from > to) msg = 'Nomor ayat harus antara ' + t.start + ' dan ' + t.end + ', dan ayat awal tidak boleh lebih besar dari ayat akhir.';
+    if (msg) { err.textContent = msg; err.hidden = false; return; }
+    err.hidden = true;
+    var who = $('#f-who').value.trim();
+    try { localStorage.setItem('hafalan-who', who); } catch (x) {}
+    var rec = { child: S.child, date: date, type: curType(), target: t.id, from: from, to: to,
+      grade: ($('input[name="f-grade"]:checked') || {}).value || 'lancar', who: who, note: $('#f-note').value.trim(), ts: Date.now() };
+    var id = uid(), btn = $('#f-submit'); btn.disabled = true;
+    store.put('logs', id, rec).then(function () {
+      var rng = from === to ? 'ayat ' + from : 'ayat ' + from + '–' + to;
+      toast('Tersimpan: ' + t.name + ' ' + rng + ' (' + TYPE[rec.type] + ')');
+      $('#f-note').value = '';
+      setTimeout(applyDefaults, 0);
+    }).catch(function (er) { err.textContent = dbMsg(er); err.hidden = false; }).then(function () { btn.disabled = !S.ready; });
+  }
+
+  function renderTargets() {
+    var c = S.child, st = stats(c), ag = aggregate(st);
+    $('#t-sub').textContent = 'Target ' + kidOf(c).name + ': ' + fmt(TOTAL_AYAT) + ' ayat dalam ' + T.length + ' target. Sudah hafal ' + ag.hafal + ' target.';
+    $$('#t-groups button').forEach(function (b) { b.setAttribute('aria-pressed', String(b.dataset.gf === S.ui.group)); });
+    var list = T.filter(function (t) { return S.ui.group === 'semua' || t.group === S.ui.group; });
+    if (S.ui.rev) {
+      var keep = list.filter(function (t) { return t.group === 'pilihan'; });
+      var j30 = list.filter(function (t) { return t.group === 'j30'; }).reverse();
+      var j29 = list.filter(function (t) { return t.group === 'j29'; }).reverse();
+      list = keep.concat(j30, j29);
+    }
+    list = list.filter(function (t) {
+      var r = st[t.id], f = S.ui.status;
+      if (f === 'semua') return true;
+      if (f === 'ulang') return r.needs;
+      return r.status === f;
+    });
+    $('#t-list').innerHTML = list.length ? list.map(function (t) {
+      var r = st[t.id], p = r.count / t.n * 100;
+      var chip = r.status === 'hafal' ? 'good' : r.status === 'sedang' ? 'warn' : 'mute';
+      return '<article class="trow"><div class="r-head"><div><div class="r-name">' + esc(t.name) + '</div><div class="meta">' + esc(metaOf(t)) + '</div></div>' +
+        '<div class="ar" lang="ar" dir="rtl">' + t.ar + '</div></div>' +
+        '<div class="r-mid"><div class="bar ' + (r.status === 'hafal' ? 'good' : '') + '"><i style="width:' + p + '%"></i></div><span class="meta num">' + r.count + '/' + t.n + '</span></div>' +
+        '<div class="r-foot"><div><span class="chip ' + chip + '">' + STATUS[r.status] + '</span>' + (r.needs ? ' <span class="chip alert">Perlu diulang</span>' : '') +
+        (r.last ? '<div class="meta" style="margin-top:4px">Terakhir ' + fmtShort(r.last) + ' · ' + GRADE[r.lastGrade] + '</div>' : '') + '</div>' +
+        '<div class="acts"><button type="button" class="btn sm" data-act="setor" data-t="' + t.id + '">' + (r.status === 'hafal' ? 'Murajaah' : 'Setor') + '</button>' +
+        (r.status !== 'hafal' ? '<button type="button" class="btn sm" data-act="hafal" data-t="' + t.id + '">Tandai hafal</button>' : '') + '</div></div></article>';
+    }).join('') : '<div class="empty">Tidak ada target yang cocok dengan filter ini.</div>';
+  }
+
+  function markHafal(tid) {
+    var t = TB[tid]; if (!t || !S.ready) return;
+    var id = uid();
+    store.put('logs', id, { child: S.child, date: today(), type: 'baru', target: tid, from: t.start, to: t.end, grade: 'lancar', who: '', note: 'Ditandai hafal dari daftar target', ts: Date.now() })
+      .then(function () { toast(t.name + ' ditandai hafal.', { label: 'Batalkan', fn: function () { store.del('logs', id).catch(function (er) { toast(dbMsg(er)); }); } }); })
+      .catch(function (er) { toast(dbMsg(er)); });
+  }
+
+  function childExtras(c) {
+    return Object.keys(S.extras).map(function (k) { return S.extras[k]; }).filter(function (x) { return x.child === c; }).sort(function (a, b) { return (b.ts || 0) - (a.ts || 0); });
+  }
+  function renderDoa() {
+    var ex = childExtras(S.child), have = {};
+    ex.forEach(function (x) { have[x.title.toLowerCase()] = 1; });
+    var sug = SUGGEST.filter(function (s) { return !have[s[0].toLowerCase()]; });
+    $('#d-sugg').innerHTML = sug.length ? '<p class="eyebrow">Usulan bacaan (ketuk untuk mengisi form)</p><div class="chips" style="margin-top:8px">' +
+      sug.map(function (s) { return '<button type="button" data-act="sugg" data-title="' + esc(s[0]) + '" data-kind="' + esc(s[1]) + '">' + esc(s[0]) + '</button>'; }).join('') + '</div>' : '';
+    $('#d-list').innerHTML = ex.length ? ex.map(function (x) {
+      var chip = x.status === 'hafal' ? 'good' : x.status === 'sedang' ? 'warn' : 'mute';
+      return '<article class="ex"><div class="ex-head"><div><b>' + esc(x.title) + '</b><div class="meta">' + esc(x.kind) + ' · ' + fmtShort(x.date) + '</div></div><span class="chip ' + chip + '">' + STATUS[x.status] + '</span></div>' +
+        '<div class="seg sm status" role="group" aria-label="Ubah status ' + esc(x.title) + '">' +
+        ['belum', 'sedang', 'hafal'].map(function (s) { return '<button type="button" data-act="ex-status" data-id="' + x.id + '" data-s="' + s + '" aria-pressed="' + (x.status === s) + '">' + { belum: 'Belum', sedang: 'Sedang', hafal: 'Hafal' }[s] + '</button>'; }).join('') + '</div>' +
+        (x.note ? '<p class="note">' + esc(x.note) + '</p>' : '') +
+        '<div><button type="button" class="btn sm danger" data-act="del-ex" data-id="' + x.id + '" data-label="Hapus">Hapus</button></div></article>';
+    }).join('') : '<div class="empty">Belum ada catatan. Tambahkan doa, dzikir, atau bacaan salat yang sedang dihafal.</div>';
+    renderExportButtons();
+  }
+
+  function onSubmitDoa(e) {
+    e.preventDefault();
+    if (!S.ready) return;
+    var title = $('#d-title').value.trim(), err = $('#d-err');
+    if (!title) { err.textContent = 'Isi nama bacaan terlebih dahulu.'; err.hidden = false; return; }
+    err.hidden = true;
+    var rec = { child: S.child, title: title, kind: $('#d-kind').value, status: ($('input[name="d-status"]:checked') || {}).value || 'sedang', date: $('#d-date').value || today(), note: $('#d-note').value.trim(), ts: Date.now() };
+    var btn = $('#d-submit'); btn.disabled = true;
+    store.put('extras', uid(), rec).then(function () {
+      toast('Ditambahkan: ' + title); $('#d-title').value = ''; $('#d-note').value = '';
+    }).catch(function (er) { err.textContent = dbMsg(er); err.hidden = false; }).then(function () { btn.disabled = !S.ready; });
+  }
+
+  function renderLogs() {
+    var ls = childLogs(S.child).sort(byTime).reverse(), el = $('#l-list');
+    if (!S.loaded) { el.innerHTML = '<div class="empty">Memuat catatan…</div>'; return; }
+    if (!ls.length) { el.innerHTML = '<div class="empty">Belum ada setoran. Catat yang pertama di tab Setor.</div>'; return; }
+    var shown = ls.slice(0, S.ui.logLimit), h = '', last = '';
+    shown.forEach(function (l) {
+      if (l.date !== last) { h += '<p class="dayh">' + fmtLong(l.date) + '</p>'; last = l.date; }
+      h += logRow(l, true);
+    });
+    if (ls.length > shown.length) h += '<button type="button" class="btn" data-act="more-logs">Tampilkan lebih banyak (' + (ls.length - shown.length) + ' lagi)</button>';
+    el.innerHTML = h;
+  }
+
+  function buildRekap(c) {
+    var kid = kidOf(c), days = lastDays(7), from = days[0].key, to = days[6].key;
+    var ls = childLogs(c).filter(function (l) { return l.date >= from && l.date <= to; }).sort(byTime);
+    var ayat = ls.reduce(function (a, l) { return a + (l.to - l.from + 1); }, 0);
+    var hari = {}; ls.forEach(function (l) { hari[l.date] = 1; });
+    var ag = aggregate(stats(c)), lines = ['Rekap hafalan ' + kid.name + ' (' + fmtShort(from) + ' – ' + fmtShort(to) + ' ' + parseYmd(to).getFullYear() + ')'];
+    if (ls.length) {
+      lines.push('Setoran: ' + ls.length + 'x di ' + Object.keys(hari).length + ' hari, total ' + ayat + ' ayat');
+      ls.forEach(function (l) {
+        var t = TB[l.target] || { name: l.target };
+        lines.push('- ' + fmtShort(l.date) + ' ' + TYPE[l.type] + ': ' + t.name + (l.from === l.to ? ' ayat ' + l.from : ' ayat ' + l.from + '–' + l.to) + ' (' + GRADE[l.grade] + ')');
+      });
+    } else lines.push('Belum ada setoran pada 7 hari terakhir.');
+    lines.push('', 'Total hafal: ' + fmt(ag.count) + ' dari ' + fmt(ag.total) + ' ayat (' + pctOf(ag.count, ag.total) + '%)');
+    return lines.join('\n');
+  }
+
+  function doRekap() {
+    var text = buildRekap(S.child), box = $('#rekap-box');
+    box.value = text;
+    function showBox() { box.hidden = false; box.focus(); box.select(); }
+    try {
+      navigator.clipboard.writeText(text).then(function () { toast('Rekap disalin. Tempel di WhatsApp atau catatan.'); box.hidden = false; }, function () { showBox(); toast('Salin manual dari kotak teks di bawah.'); });
+    } catch (e) { showBox(); toast('Salin manual dari kotak teks di bawah.'); }
+  }
+
+  function renderExportButtons() {
+    var ok = !!store.dl;
+    $('#csv-log-btn').hidden = !ok; $('#csv-note').hidden = !ok;
+    $('#d-export').hidden = !(ok && Object.keys(S.extras).length);
+  }
+  function cell(v) { v = String(v == null ? '' : v); return /[";\n\r]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v; }
+  function saveCsv(name, rows) {
+    if (!store.dl) return;
+    var csv = '﻿' + rows.map(function (r) { return r.map(cell).join(';'); }).join('\r\n');
+    store.dl.save({ filename: name, data: csv }).then(function () { toast('Berkas disimpan.'); }, function (er) {
+      if (er && er.code === 'declined') return; toast('Berkas tidak bisa diunduh di tampilan ini.');
+    });
+  }
+  function exportLogs() {
+    var rows = [['Anak', 'Tanggal', 'Jenis', 'Target', 'Dari ayat', 'Sampai ayat', 'Nilai', 'Penyimak', 'Catatan']];
+    Object.keys(S.logs).map(function (k) { return S.logs[k]; }).sort(byTime).forEach(function (l) {
+      var k = kidOf(l.child); rows.push([k ? k.name : l.child, l.date, TYPE[l.type], (TB[l.target] || { name: l.target }).name, l.from, l.to, GRADE[l.grade], l.who, l.note]);
+    });
+    saveCsv('setoran-hafalan.csv', rows);
+  }
+  function exportExtras() {
+    var rows = [['Anak', 'Tanggal', 'Jenis', 'Nama bacaan', 'Status', 'Catatan']];
+    Object.keys(S.extras).map(function (k) { return S.extras[k]; }).sort(function (a, b) { return (a.ts || 0) - (b.ts || 0); }).forEach(function (x) {
+      var k = kidOf(x.child); rows.push([k ? k.name : x.child, x.date, x.kind, x.title, STATUS[x.status], x.note]);
+    });
+    saveCsv('doa-dzikir-hafalan.csv', rows);
+  }
+
+  var setT;
+  function fillSettings() {
+    S.settings.children.forEach(function (c) {
+      var n = $('#s-name-' + c.id), i = $('#s-info-' + c.id);
+      if (document.activeElement !== n) n.value = c.name;
+      if (document.activeElement !== i) i.value = c.info || '';
+    });
+    $('#s-days').value = String(S.settings.reviewDays);
+    $('#s-mode').textContent = modeText();
+  }
+  function onSettingsInput() {
+    S.settings.children.forEach(function (c) {
+      var n = $('#s-name-' + c.id).value.trim();
+      if (n) c.name = n;
+      c.info = $('#s-info-' + c.id).value.trim();
+    });
+    S.settings.reviewDays = Number($('#s-days').value) || 14;
+    bump(); renderHeader();
+    clearTimeout(setT);
+    setT = setTimeout(function () { store.saveSettings().catch(function (er) { toast(dbMsg(er)); }); }, 700);
+  }
+
+  function onReady() {
+    $('#f-submit').disabled = false; $('#f-submit').textContent = 'Simpan setoran';
+    $('#d-submit').disabled = false;
+    fillSettings(); renderAll();
+  }
+
+  function arm(btn, fn) {
+    if (btn.dataset.armed === '1') { fn(); return; }
+    btn.dataset.armed = '1'; btn.textContent = 'Yakin hapus?';
+    setTimeout(function () { if (btn.isConnected) { btn.dataset.armed = ''; btn.textContent = btn.dataset.label || 'Hapus'; } }, 3500);
+  }
+
+  // Robust Global Navigation Listener
+  document.addEventListener('click', function (e) {
+    var navLink = e.target.closest('[data-nav]');
+    if (navLink) {
+      e.preventDefault();
+      var targetView = navLink.dataset.nav;
+      go(targetView);
+      return;
+    }
+    var k = e.target.closest('[data-kid]');
+    if (k) {
+      S.child = k.dataset.kid; try { localStorage.setItem('hafalan-child', S.child); } catch (x) {}
+      renderAll(); if (S.view === 'setor') applyDefaults(); return;
+    }
+    var gf = e.target.closest('[data-gf]');
+    if (gf) { S.ui.group = gf.dataset.gf; renderTargets(); return; }
+    var b = e.target.closest('[data-act]'); if (!b) return;
+    var act = b.dataset.act;
+    if (act === 'setor') prefill(b.dataset.t, b.dataset.type);
+    else if (act === 'hafal') markHafal(b.dataset.t);
+    else if (act === 'del-log') arm(b, function () { store.del('logs', b.dataset.id).catch(function (er) { toast(dbMsg(er)); }); });
+    else if (act === 'del-ex') arm(b, function () { store.del('extras', b.dataset.id).catch(function (er) { toast(dbMsg(er)); }); });
+    else if (act === 'ex-status') {
+      var x = S.extras[b.dataset.id]; if (!x || x.status === b.dataset.s) return;
+      var upd = Object.assign({}, x, { status: b.dataset.s, date: today() }); delete upd.id;
+      store.put('extras', x.id, upd).catch(function (er) { toast(dbMsg(er)); });
+    }
+    else if (act === 'sugg') { $('#d-title').value = b.dataset.title; $('#d-kind').value = b.dataset.kind; $('#d-title').focus(); }
+    else if (act === 'more-logs') { S.ui.logLimit += 40; renderLogs(); }
+    else if (act === 'rekap') doRekap();
+    else if (act === 'csv-log') exportLogs();
+    else if (act === 'csv-ex') exportExtras();
+  });
+
+  $('#f-setor').addEventListener('submit', onSubmitSetor);
+  $('#f-doa').addEventListener('submit', onSubmitDoa);
+  $('#f-target').addEventListener('change', applyDefaults);
+  $$('input[name="f-type"]').forEach(function (r) { r.addEventListener('change', applyDefaults); });
+  $('#t-status').addEventListener('change', function (e) { S.ui.status = e.target.value; renderTargets(); });
+  $('#t-rev').addEventListener('change', function (e) { S.ui.rev = e.target.checked; renderTargets(); });
+  ['s-name-a', 's-info-a', 's-name-b', 's-info-b'].forEach(function (id) { $('#' + id).addEventListener('input', onSettingsInput); });
+  $('#s-days').addEventListener('change', onSettingsInput);
+  window.addEventListener('hashchange', route);
+
+  (function build() {
+    var opts = '<optgroup label="Al-Fatihah dan ayat pilihan">' + T.filter(function (t) { return t.group === 'pilihan'; }).map(function (t) { return '<option value="' + t.id + '">' + esc(t.name) + '</option>'; }).join('') + '</optgroup>';
+    [['j30', "Juz 30 (Juz 'Amma)"], ['j29', 'Juz 29 (Tabarak)']].forEach(function (g) {
+      opts += '<optgroup label="' + g[1] + '">' + T.filter(function (t) { return t.group === g[0]; }).map(function (t) { return '<option value="' + t.id + '">' + t.surah + '. ' + esc(t.name) + ' (' + t.n + ' ayat)</option>'; }).join('') + '</optgroup>';
+    });
+    $('#f-target').innerHTML = opts;
+    var td = today();
+    $('#f-date').value = td; $('#f-date').max = td; $('#d-date').value = td;
+    try { $('#f-who').value = localStorage.getItem('hafalan-who') || ''; } catch (e) {}
+    $('#f-submit').disabled = true; $('#f-submit').textContent = 'Menyiapkan penyimpanan…'; $('#d-submit').disabled = true;
+    applyDefaults(); fillSettings(); route();
+    store.init();
+  })();
+})();
+</script>
+</body>
+</html>
